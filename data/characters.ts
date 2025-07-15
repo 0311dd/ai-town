@@ -92,4 +92,3 @@ export const Descriptions = [
 ];
 
 export const movementSpeed = 0.75;
-export { Descriptions };
