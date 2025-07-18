@@ -1,9 +1,13 @@
-// convex.config.js
+// convex.config.ts
+import { defineConfig } from 'convex/config';
+
 export default defineConfig({
-  providers: [
-    {
-      domain: 'https://github.com',
-      applicationID: 'Ov23liAxR728y9Wk3MmD',
-    },
-  ],
+  auth: {
+    providers: [
+      {
+        domain: 'https://api.clerk.dev',
+        applicationID: 'app_301hjsijTy2qA46Qc694NURdwS7',
+      },
+    ],
+  },
 });
