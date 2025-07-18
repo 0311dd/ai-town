@@ -5,9 +5,9 @@ import a16zImg from '../assets/a16z.png';
 import convexImg from '../assets/convex.svg';
 import starImg from '../assets/star.svg';
 import helpImg from '../assets/help.svg';
-// import { UserButton } from '@clerk/clerk-react';
-// import { Authenticated, Unauthenticated } from 'convex/react';
-// import LoginButton from './components/buttons/LoginButton.tsx';
+import { UserButton } from '@clerk/clerk-react';
+import { Authenticated, Unauthenticated } from 'convex/react';
+import LoginButton from './components/buttons/LoginButton.tsx';
 import { useState } from 'react';
 import ReactModal from 'react-modal';
 import MusicButton from './components/buttons/MusicButton.tsx';
@@ -22,7 +22,14 @@ export default function Home() {
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-between font-body game-background">
       <PoweredByConvex />
-
+<div className="p-3 absolute top-0 right-0 z-10 text-2xl">
+  <Authenticated>
+    <UserButton afterSignOutUrl="/ai-town" />
+  </Authenticated>
+  <Unauthenticated>
+    <LoginButton />
+  </Unauthenticated>
+</div>
       <ReactModal
         isOpen={helpModalOpen}
         onRequestClose={() => setHelpModalOpen(false)}
