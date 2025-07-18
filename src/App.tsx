@@ -34,7 +34,7 @@ export default function RootLayout({ children }) {
   );
 }
 
-export default function Home() {
+ 
   const [helpModalOpen, setHelpModalOpen] = useState(false);
   return (
     <main className="relative flex min-h-screen flex-col items-center justify-between font-body game-background">
