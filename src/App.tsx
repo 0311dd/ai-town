@@ -16,6 +16,23 @@ import InteractButton from './components/buttons/InteractButton.tsx';
 import FreezeButton from './components/FreezeButton.tsx';
 import { MAX_HUMAN_PLAYERS } from '../convex/constants.ts';
 import PoweredByConvex from './components/PoweredByConvex.tsx';
+// app/layout.tsx
+import { ClerkProvider } from '@clerk/nextjs';
+import { ConvexProviderWithClerk } from 'convex/react-clerk';
+import { ConvexReactClient } from 'convex/react';
+import { useAuth } from '@clerk/nextjs';
+
+const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
+
+export default function RootLayout({ children }) {
+  return (
+    <ClerkProvider>
+      <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+        {children}
+      </ConvexProviderWithClerk>
+    </ClerkProvider>
+  );
+}
 
 export default function Home() {
   const [helpModalOpen, setHelpModalOpen] = useState(false);

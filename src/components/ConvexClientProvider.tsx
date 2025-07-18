@@ -1,17 +1,17 @@
-import { ReactNode } from 'react';
+// app/layout.tsx
+import { ClerkProvider } from '@clerk/nextjs';
+import { ConvexProviderWithClerk } from 'convex/react-clerk';
 import { ConvexReactClient } from 'convex/react';
-import { ConvexProviderWithAuth } from 'convex/react-auth';
+import { useAuth } from '@clerk/nextjs';
 
-function convexUrl(): string {
-  const url = import.meta.env.VITE_CONVEX_URL as string;
-  if (!url) {
-    throw new Error('Couldn’t find the Convex deployment URL.');
-  }
-  return url;
-}
+const convex = new ConvexReactClient(process.env.NEXT_PUBLIC_CONVEX_URL!);
 
-const convex = new ConvexReactClient(convexUrl(), { unsavedChangesWarning: false });
-
-export default function ConvexClientProvider({ children }: { children: ReactNode }) {
-  return <ConvexProviderWithAuth client={convex}>{children}</ConvexProviderWithAuth>;
+export default function RootLayout({ children }) {
+  return (
+    <ClerkProvider>
+      <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+        {children}
+      </ConvexProviderWithClerk>
+    </ClerkProvider>
+  );
 }
