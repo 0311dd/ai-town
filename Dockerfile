@@ -14,12 +14,9 @@ RUN apt-get update && \
     iproute2 \
     && rm -rf /var/lib/apt/lists/*
 
-# Install NVM, Node.js, and npm
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.2/install.sh | bash && \
-    export NVM_DIR="$HOME/.nvm" && \
-    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" && \
-    nvm install 18 && \
-    nvm use 18
+# Install Node.js 18 directly
+RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get install -y nodejs
 
 # Add NVM to PATH
 ENV NVM_DIR /root/.nvm
