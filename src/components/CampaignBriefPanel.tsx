@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { useMutation } from 'convex/react';
+import { useMutation, useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
+import { Id } from '../../convex/_generated/dataModel';
 
 export function CampaignBriefPanel() {
-  // Update the import path to your actual mutation function, for example:
-    // Update this to match the actual mutation path in your convex functions
-    const createBrief = useMutation(api.aiTown.main.sendInput);
-  // Make sure 'campaignBrief.create' matches the actual export in your convex functions
+  const createBrief = useMutation(api.aiTown.main.sendInput);
+  const worldId = useQuery(api.world.getDefaultWorldId);
+
   const [isOpen, setIsOpen] = useState(false);
+
   const [formData, setFormData] = useState({
     company: '',
     product: '',
@@ -20,9 +21,21 @@ export function CampaignBriefPanel() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!worldId) {
+      alert('World ID not loaded yet.');
+      return;
+    }
+
     try {
-      await createBrief(formData);
-      alert('Campaign brief submitted! Watch your marketing team discuss it.');
+      await createBrief({
+        worldId: worldId as Id<'worlds'>,
+        name: 'campaignBrief',
+        args: formData,
+      });
+
+      alert('Campaign brief submitted!');
+
       setFormData({
         company: '',
         product: '',
@@ -32,6 +45,7 @@ export function CampaignBriefPanel() {
         timeline: '',
         constraints: '',
       });
+
       setIsOpen(false);
     } catch (error) {
       console.error('Error creating brief:', error);
@@ -88,7 +102,7 @@ export function CampaignBriefPanel() {
               type="text"
               placeholder="Company Name"
               value={formData.company}
-              onChange={(e) => setFormData({...formData, company: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, company: e.target.value })}
               required
               style={inputStyle}
             />
@@ -96,22 +110,22 @@ export function CampaignBriefPanel() {
               type="text"
               placeholder="Product/Service"
               value={formData.product}
-              onChange={(e) => setFormData({...formData, product: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, product: e.target.value })}
               required
               style={inputStyle}
             />
             <textarea
               placeholder="Campaign Objective (e.g., Increase brand awareness by 30%)"
               value={formData.objective}
-              onChange={(e) => setFormData({...formData, objective: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, objective: e.target.value })}
               required
-              style={{...inputStyle, minHeight: '80px', resize: 'vertical'}}
+              style={{ ...inputStyle, minHeight: '80px', resize: 'vertical' }}
             />
             <input
               type="text"
               placeholder="Target Audience (e.g., 25-35 urban professionals)"
               value={formData.targetAudience}
-              onChange={(e) => setFormData({...formData, targetAudience: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, targetAudience: e.target.value })}
               required
               style={inputStyle}
             />
@@ -119,7 +133,7 @@ export function CampaignBriefPanel() {
               type="text"
               placeholder="Budget (e.g., $500,000)"
               value={formData.budget}
-              onChange={(e) => setFormData({...formData, budget: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
               required
               style={inputStyle}
             />
@@ -127,15 +141,15 @@ export function CampaignBriefPanel() {
               type="text"
               placeholder="Timeline (e.g., 3 months, Q1 2024)"
               value={formData.timeline}
-              onChange={(e) => setFormData({...formData, timeline: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, timeline: e.target.value })}
               required
               style={inputStyle}
             />
             <textarea
               placeholder="Constraints/Special Requirements (optional)"
               value={formData.constraints}
-              onChange={(e) => setFormData({...formData, constraints: e.target.value})}
-              style={{...inputStyle, minHeight: '60px', resize: 'vertical'}}
+              onChange={(e) => setFormData({ ...formData, constraints: e.target.value })}
+              style={{ ...inputStyle, minHeight: '60px', resize: 'vertical' }}
             />
             <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
               <button 
