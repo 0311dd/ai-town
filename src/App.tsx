@@ -15,11 +15,6 @@ import Button from './components/buttons/Button.tsx';
 import InteractButton from './components/buttons/InteractButton.tsx';
 import FreezeButton from './components/FreezeButton.tsx';
 import PoweredByConvex from './components/PoweredByConvex.tsx';
-<<<<<<< HEAD
-import { CampaignBriefPanel } from './components/CampaignBriefPanel';
-=======
-import { MAX_HUMAN_PLAYERS } from '../convex/constants.ts';
->>>>>>> dbf0864e4c0868534aedee13da51c4b3f346ffdd
 
 export default function App() {
   const [helpModalOpen, setHelpModalOpen] = useState(false);
