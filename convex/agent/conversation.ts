@@ -8,8 +8,31 @@ import * as embeddingsCache from './embeddingsCache';
 import { GameId, conversationId, playerId } from '../aiTown/ids';
 import { NUM_MEMORIES_TO_SEARCH } from '../constants';
 
-const selfInternal = internal.agent.conversation;
 
+const selfInternal = internal.agent.conversation;
+// Helper function to get campaign context for conversations
+export async function getCampaignContext(ctx: any) {
+  try {
+    const activeBrief = await ctx.db
+      .query("campaignBriefs")
+      .filter((q: any) => q.eq(q.field("status"), "active"))
+      .order("desc")
+      .first();
+    
+    if (activeBrief) {
+      return `Current campaign brief: ${activeBrief.company} wants to promote ${activeBrief.product}. 
+              Objective: ${activeBrief.objective}. 
+              Target: ${activeBrief.targetAudience}. 
+              Budget: ${activeBrief.budget}. 
+              Timeline: ${activeBrief.timeline}.
+              ${activeBrief.constraints ? `Additional requirements: ${activeBrief.constraints}` : ''}`;
+    }
+  } catch (error) {
+    console.error("Error fetching campaign brief:", error);
+  }
+  
+  return "No active campaign brief. Discuss general marketing strategies and wait for a brief.";
+}
 export async function startConversationMessage(
   ctx: ActionCtx,
   worldId: Id<'worlds'>,
@@ -349,4 +372,5 @@ function stopWords(otherPlayer: string, player: string) {
   // These are the words we ask the LLM to stop on. OpenAI only supports 4.
   const variants = [`${otherPlayer} to ${player}`];
   return variants.flatMap((stop) => [stop + ':', stop.toLowerCase() + ':']);
+
 }

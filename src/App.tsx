@@ -16,6 +16,7 @@ import InteractButton from './components/buttons/InteractButton.tsx';
 import FreezeButton from './components/FreezeButton.tsx';
 import { MAX_HUMAN_PLAYERS } from '../convex/constants.ts';
 import PoweredByConvex from './components/PoweredByConvex.tsx';
+import { CampaignBriefPanel } from './components/CampaignBriefPanel';
 
 export default function Home() {
   const [helpModalOpen, setHelpModalOpen] = useState(false);
@@ -61,6 +62,8 @@ export default function Home() {
             minutes, you'll be automatically removed from the simulation.
           </p>
         </div>
+
+        
       </ReactModal>
       {/*<div className="p-3 absolute top-0 right-0 z-10 text-2xl">
         <Authenticated>
@@ -86,7 +89,11 @@ export default function Home() {
           </Unauthenticated> */}
         </div>
 
-        <Game />
+{/* Main game and campaign brief panel */}
+<div className="relative">
+  <Game />
+  <CampaignBriefPanel />
+</div>
 
         <footer className="justify-end bottom-0 left-0 w-full flex items-center mt-4 gap-3 p-6 flex-wrap pointer-events-none">
           <div className="flex gap-4 flex-grow pointer-events-none">

@@ -1,6 +1,6 @@
 import { v } from 'convex/values';
+import { defineSchema, defineTable } from 'convex/server';
 import { playerId, conversationId } from '../aiTown/ids';
-import { defineTable } from 'convex/server';
 import { EMBEDDING_DIMENSION } from '../util/llm';
 
 export const memoryFields = {
@@ -29,6 +29,7 @@ export const memoryFields = {
     }),
   ),
 };
+
 export const memoryTables = {
   memories: defineTable(memoryFields)
     .index('embeddingId', ['embeddingId'])
@@ -51,3 +52,34 @@ export const agentTables = {
     embedding: v.array(v.float64()),
   }).index('text', ['textHash']),
 };
+
+// Define the complete schema with all tables
+export default defineSchema({
+  // Include all the agent tables
+  ...agentTables,
+  
+  // Campaign brief tables
+  campaignBriefs: defineTable({
+    company: v.string(),
+    product: v.string(),
+    objective: v.string(),
+    targetAudience: v.string(),
+    budget: v.string(),
+    timeline: v.string(),
+    constraints: v.optional(v.string()),
+    status: v.string(),
+    createdAt: v.number(),
+  }),
+  
+  // Messages table with campaign brief support
+  messages: defineTable({
+    author: v.string(),
+    text: v.string(),
+    timestamp: v.number(),
+    conversationId: v.optional(v.string()),
+    briefId: v.optional(v.id("campaignBriefs")),
+    isAnnouncement: v.optional(v.boolean()),
+    worldId: v.optional(v.id("worlds")),
+    messageUuid: v.optional(v.string()),
+  }),
+});
