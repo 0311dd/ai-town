@@ -142,4 +142,4 @@ export const characters = [
 ];
 
 // Export the movement speed constant
-export const movementSpeed = 0.15;
+export const movementSpeed = 0.75;
